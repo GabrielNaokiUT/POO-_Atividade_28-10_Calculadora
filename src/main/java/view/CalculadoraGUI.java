@@ -6,6 +6,7 @@ package view;
 
 import java.awt.Color;
 import model.Calculadora;
+import util.arquivo;
 
 /**
  *
@@ -20,6 +21,8 @@ public class CalculadoraGUI extends javax.swing.JFrame {
      */
     public CalculadoraGUI() {
         initComponents();
+        setLocationRelativeTo(null);
+        setResizable(false);
     }
 
     /**
@@ -44,6 +47,8 @@ public class CalculadoraGUI extends javax.swing.JFrame {
         jLabelNum2 = new javax.swing.JLabel();
         jLabelNum1 = new javax.swing.JLabel();
         jLabelResultado = new javax.swing.JLabel();
+        jButtonHistorico = new javax.swing.JButton();
+        jButtonLimparHistorico = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -125,15 +130,40 @@ public class CalculadoraGUI extends javax.swing.JFrame {
         jLabelResultado.setForeground(new java.awt.Color(0, 0, 0));
         jLabelResultado.setOpaque(true);
 
+        jButtonHistorico.setBackground(new java.awt.Color(204, 255, 255));
+        jButtonHistorico.setForeground(new java.awt.Color(0, 0, 0));
+        jButtonHistorico.setText("Historico");
+        jButtonHistorico.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonHistoricoActionPerformed(evt);
+            }
+        });
+
+        jButtonLimparHistorico.setBackground(new java.awt.Color(204, 255, 255));
+        jButtonLimparHistorico.setForeground(new java.awt.Color(0, 0, 0));
+        jButtonLimparHistorico.setText("Limpar Historico");
+        jButtonLimparHistorico.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonLimparHistoricoActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(26, 26, 26)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabelNum2, javax.swing.GroupLayout.DEFAULT_SIZE, 154, Short.MAX_VALUE)
-                    .addComponent(jLabelNum1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(26, 26, 26)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(jLabelNum2, javax.swing.GroupLayout.DEFAULT_SIZE, 154, Short.MAX_VALUE)
+                                .addComponent(jLabelNum1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(jButtonHistorico, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(73, 73, 73)
+                        .addComponent(jButtonLimparHistorico, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabelResultado, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -175,11 +205,16 @@ public class CalculadoraGUI extends javax.swing.JFrame {
                         .addComponent(jLabelNum2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jTFNumero2, javax.swing.GroupLayout.Alignment.LEADING)))
                 .addGap(27, 27, 27)
-                .addComponent(jLabelResultado, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jButtonLimpar)
-                .addGap(41, 41, 41)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabelResultado, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButtonLimpar)
+                        .addGap(41, 41, 41)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButtonLimparHistorico)))
+                    .addComponent(jButtonHistorico))
                 .addGap(26, 26, 26))
         );
 
@@ -220,7 +255,9 @@ public class CalculadoraGUI extends javax.swing.JFrame {
             jLabelResultado.setText("Resultado: " + resultado);
 
             jTAHistorico.append(num1 + " / " + num2 + " = " + resultado + "\n" );
-
+            String linha = num1 + "/" + num2 + " = " + resultado; //guardar histórico das operações//
+            arquivo.salvarLinha(linha);
+               
             jLabelResultado.setForeground(Color.RED);
         } catch (NumberFormatException ex) {
             jLabelResultado.setText("Digite apenas valores numéricos!");
@@ -255,6 +292,8 @@ public class CalculadoraGUI extends javax.swing.JFrame {
 
             jLabelResultado.setText("Resultado: " + resultado);
             jTAHistorico.append(num1 + " * " + num2 + " = " + resultado + "\n");
+            String linha = num1 + " * " + num2 + " = " + resultado;
+            arquivo.salvarLinha(linha);
             jLabelResultado.setForeground(Color.RED);
         } catch (NumberFormatException ex) {
             jLabelResultado.setText("Digite apenas valores numéricos!");
@@ -281,6 +320,8 @@ public class CalculadoraGUI extends javax.swing.JFrame {
 
             jLabelResultado.setText("Resultado: " + resultado);
             jTAHistorico.append(num1 + " + " + num2 + " = " + resultado + "\n");
+            String linha = num1 + " + " + num2 + " = " + resultado;
+            arquivo.salvarLinha(linha);
             jLabelResultado.setForeground(Color.RED);
         } catch (NumberFormatException ex) {
             jLabelResultado.setText("Digite apenas valores numéricos!");
@@ -308,6 +349,8 @@ public class CalculadoraGUI extends javax.swing.JFrame {
 
             jLabelResultado.setText("Resultado: " + resultado);
             jTAHistorico.append(num1 + " - " + num2 + " = " + resultado + "\n" );
+            String linha = num1 + " - " + num2 + " = " + resultado;
+            arquivo.salvarLinha(linha);
             jLabelResultado.setForeground(Color.RED);
         } catch (NumberFormatException ex) {
             jLabelResultado.setText("Digite apenas valores numéricos! \n");
@@ -315,6 +358,19 @@ public class CalculadoraGUI extends javax.swing.JFrame {
             jLabelResultado.setText(ex.getMessage());
         }
     }//GEN-LAST:event_jButtonSubtrairActionPerformed
+
+    private void jButtonHistoricoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonHistoricoActionPerformed
+        // TODO add your handling code here:
+        new TelaSecundaria().setVisible(true);
+        dispose();
+    }//GEN-LAST:event_jButtonHistoricoActionPerformed
+
+    private void jButtonLimparHistoricoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonLimparHistoricoActionPerformed
+        // TODO add your handling code here:
+        jTAHistorico.setText("");
+        jTFNumero1.requestFocus();
+        
+    }//GEN-LAST:event_jButtonLimparHistoricoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -343,7 +399,9 @@ public class CalculadoraGUI extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonDividir;
+    private javax.swing.JButton jButtonHistorico;
     private javax.swing.JButton jButtonLimpar;
+    private javax.swing.JButton jButtonLimparHistorico;
     private javax.swing.JButton jButtonMultiplicar;
     private javax.swing.JButton jButtonSomar;
     private javax.swing.JButton jButtonSubtrair;
